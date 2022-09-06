@@ -1,0 +1,1 @@
+export { getFrom } from "./object";
