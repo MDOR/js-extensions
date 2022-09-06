@@ -1,0 +1,11 @@
+.DS_Store
+.DS_Store/
+.eslintcache
+.yarn/cache
+
+node_modules
+jspm_packages
+.next
+build
+dist
+coverage
