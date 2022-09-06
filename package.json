@@ -17,11 +17,13 @@
     "prebuild": "rm -rf dist",
     "build": "npx babel src/** -d dist --ignore '**/*.test.js' --ignore '**/*.spec.js'",
     "postbuild": "esbuild ./dist/index.js --outfile=./dist/index.min.js --minify-whitespace",
-    "prettier": "npx prettier --list-different --write \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
-    "test": "jest",
-    "test:coverage": "jest --coverage --collectCoverageFrom=\"./src/**\"",
     "prepublish": "npm run build",
-    "publish": "np"
+    "publish": "np",
+    "prettier": "npx prettier --list-different --write \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
+    "format": "npx prettier --check \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix --report-unused-disable-directives",
+    "test": "jest",
+    "test:coverage": "jest --coverage --collectCoverageFrom=\"./src/**\""
   },
   "repository": {
     "type": "git",
