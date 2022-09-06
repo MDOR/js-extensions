@@ -14,10 +14,14 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "npx babel src/** -d dist",
+    "prebuild": "rm -rf dist",
+    "build": "npx babel src/** -d dist --ignore '**/*.test.js' --ignore '**/*.spec.js'",
     "postbuild": "esbuild ./dist/index.js --outfile=./dist/index.min.js --minify-whitespace",
     "prettier": "npx prettier --list-different --write \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
-    "test": "jest "
+    "test": "jest",
+    "test:coverage": "jest --coverage --collectCoverageFrom=\"./src/**\"",
+    "prepublish": "npm run build",
+    "publish": "np"
   },
   "repository": {
     "type": "git",
@@ -29,6 +33,20 @@
     "url": "https://github.com/MDOR/js-extensions/issues"
   },
   "homepage": "https://github.com/MDOR/js-extensions#readme",
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -83,5 +101,8 @@
   },
   "peerDependencies": {
     "eslint": "^7.2.0"
+  },
+  "dependencies": {
+    "np": "^7.6.2"
   }
 }

@@ -104,7 +104,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-# This is needed as part of the libr generation
-!dist/
-!dist/**

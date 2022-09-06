@@ -9,8 +9,6 @@ describe("getFrom", () => {
       // eslint-disable-next-line unicorn/prefer-number-properties
       const falsyElements = [null, undefined, false, "", NaN, 0];
 
-      console.log(Object.entries(falsyElements));
-
       for (const [index, value] of Object.entries(falsyElements))
         expect(getFrom(`[${index}]`)(falsyElements)).toEqual(value);
     });
@@ -25,7 +23,11 @@ describe("getFrom", () => {
   });
 
   describe("objects", () => {
-    it("should return undefined if prop does not exist and fallback is emmpty", () => {
+    it("should return fallback if prop does not exist", () => {
+      expect(getFrom("a", 0)({ a: undefined })).toEqual(0);
+    });
+
+    it("should return undefined if prop does not exist and fallback is empty", () => {
       expect(getFrom("a.b.c.name")(obj)).toEqual(undefined);
     });
 
@@ -45,7 +47,11 @@ describe("getFrom", () => {
   });
 
   describe("arrays", () => {
-    it("should return undefined if prop does not exist and fallback is emmpty", () => {
+    it("should return fallback if prop does not exist", () => {
+      expect(getFrom("a", 0)({ a: undefined })).toEqual(0);
+    });
+
+    it("should return undefined if prop does not exist and fallback is empty", () => {
       expect(getFrom("a.b.c.name")(objWithArr)).toEqual(undefined);
     });
 
