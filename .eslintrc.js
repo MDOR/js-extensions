@@ -22,6 +22,7 @@ module.exports = {
     ecmaVersion: 8,
     sourceType: "module",
   },
+  ignorePatterns: ["dist/**"],
   rules: {
     "prettier/prettier": "off",
 
