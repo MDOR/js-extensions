@@ -1,1 +1,1 @@
-export { getFrom } from "./object";
+export { getFrom, setInto } from "./object/index.js";
