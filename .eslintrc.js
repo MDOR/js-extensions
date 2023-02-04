@@ -22,6 +22,7 @@ module.exports = {
     ecmaVersion: 8,
     sourceType: "module",
   },
+  ignorePatterns: ["dist/**"],
   rules: {
     "prettier/prettier": "off",
 
@@ -46,10 +47,12 @@ module.exports = {
     "no-extra-boolean-cast": "error",
     "no-extra-semi": "error",
     "no-self-compare": "error",
+    "no-template-curly-in-string": "error",
     "no-unneeded-ternary": "error",
     "no-unreachable": "error",
     "no-unsafe-negation": "error",
     "no-unsafe-optional-chaining": "error",
+    "no-unused-expressions": "error",
     "no-useless-computed-key": "error",
     "no-useless-concat": "error",
     "no-useless-rename": "error",
@@ -59,12 +62,10 @@ module.exports = {
     "prefer-destructuring": ["error", { VariableDeclarator: { array: false, object: true } }],
     "prefer-template": "error",
     "quote-props": ["error", "as-needed"],
-    "no-unused-expressions": "error",
     eqeqeq: "error",
     yoda: "error",
 
-    // We should look the rules are disabled and enable them latter
-    "sonarjs/cognitive-complexity": ["error", 100], // We should definitely reduce this into 30 at max
+    "sonarjs/cognitive-complexity": ["error", 40],
     "sonarjs/no-all-duplicated-branches": "error",
     "sonarjs/no-duplicate-string": "off",
     "sonarjs/no-duplicated-branches": "error",
@@ -76,7 +77,7 @@ module.exports = {
     "sonarjs/no-ignored-return": "error",
     "sonarjs/no-inverted-boolean-check": "error",
     "sonarjs/no-nested-switch": "error",
-    "sonarjs/no-nested-template-literals": "off",
+    "sonarjs/no-nested-template-literals": "error",
     "sonarjs/no-redundant-boolean": "error",
     "sonarjs/no-redundant-jump": "error",
     "sonarjs/no-same-line-conditional": "error",
@@ -84,9 +85,9 @@ module.exports = {
     "sonarjs/no-useless-catch": "error",
     "sonarjs/non-existent-operator": "error",
     "sonarjs/prefer-object-literal": "error",
+    "sonarjs/prefer-single-boolean-return": "error",
     "sonarjs/prefer-while": "error",
 
-    // Keep this grouped together as they are related
     "no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
@@ -159,27 +160,20 @@ module.exports = {
     "regexp/prefer-quantifier": "error",
     "regexp/prefer-range": "error",
     "regexp/sort-alternatives": "error",
+
+    "node/no-deprecated-api": ["error", nodeVersionConfig],
+    "node/no-exports-assign": "error",
+    "node/no-extraneous-import": "error",
+    "node/no-extraneous-require": "error",
+    "node/no-unsupported-features/es-builtins": ["error", nodeVersionConfig],
+    "node/no-unsupported-features/es-syntax": ["error", { version: ">=16.0.0", ignores: ["modules", "dynamicImport"] }],
+    "node/no-unsupported-features/node-builtins": "error",
+    "node/process-exit-as-throw": "error",
+    "node/shebang": "error",
   },
   overrides: [
     {
-      files: ["api/**/*.js"],
-      rules: {
-        "node/no-deprecated-api": ["error", nodeVersionConfig],
-        "node/no-exports-assign": "error",
-        "node/no-extraneous-import": "error",
-        "node/no-extraneous-require": "error",
-        "node/no-unsupported-features/es-builtins": ["error", nodeVersionConfig],
-        "node/no-unsupported-features/es-syntax": [
-          "error",
-          { version: ">=16.0.0", ignores: ["modules", "dynamicImport"] },
-        ],
-        "node/no-unsupported-features/node-builtins": "error",
-        "node/process-exit-as-throw": "error",
-        "node/shebang": "error",
-      },
-    },
-    {
-      files: ["*.spec.ts", "*.spec.tsx", "*.test.ts", "*.test.tsx"],
+      files: ["*.spec.js", "*.spec.ts", "*.spec.tsx", "*.test.js", "*.test.ts", "*.test.tsx"],
       rules: {
         "jest/consistent-test-it": "error",
         "jest/no-deprecated-functions": "error",
