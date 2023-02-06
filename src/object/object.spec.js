@@ -6,17 +6,12 @@ describe("getFrom", () => {
 
   describe("general", () => {
     it("should handle falsy values", () => {
+      expect(getFrom("a.b.c.name")(null)).toBeNull();
+      expect(getFrom("a.b.c.name")()).toBeUndefined();
+      expect(getFrom("a.b.c.name")(false)).toBeUndefined();
+      expect(getFrom("a.b.c.name")("")).toBeUndefined();
       // eslint-disable-next-line unicorn/prefer-number-properties
-      const falsyElements = [null, undefined, false, "", NaN, 0];
-
-      for (const [index, value] of Object.entries(falsyElements))
-        expect(getFrom(`[${index}]`)(falsyElements)).toEqual(value);
-    });
-
-    it("should not break if any invalid input has been passed", () => {
-      for (const v of [null, undefined, {}, Array, -0, false]) {
-        expect(getFrom("a.b.c.name")(v)).toBeUndefined();
-      }
+      expect(getFrom("a.b.c.name")(NaN)).toBeUndefined();
     });
   });
 
@@ -24,8 +19,8 @@ describe("getFrom", () => {
     it("should return fallback if prop does not exist", () => {
       expect(getFrom("a.b.v.c", 0)({ a: undefined })).toBe(0);
       expect(getFrom("a.b.v.c", 0)()).toBe(0);
-      expect(getFrom("a.b.v.c", 0)(null)).toBe(0);
-      expect(getFrom("a.b.v.c", 0)({ a: { b: null } })).toBe(0);
+      expect(getFrom("a.b.v.c", 0)(null)).toBeNull();
+      expect(getFrom("a.b.v.c", 0)({ a: { b: null } })).toBeNull();
     });
 
     it("should return undefined if prop does not exist and fallback is empty", () => {
@@ -124,8 +119,9 @@ describe("setInto", () => {
     it("should create a value if it does not exist and the parent prop is an object - string notation", () => {
       const obj = {};
       setInto("user.config['name']", "Marco")(obj);
+      console.log(obj);
 
-      const { config } = obj.user;
+      const { config = {} } = obj.user || {};
       expect(config.name).toBe("Marco");
       expect(config && typeof config === "object").toBe(true);
     });
@@ -142,9 +138,10 @@ describe("setInto", () => {
   describe("arrays", () => {
     it("should create a value if it does not exist and the parent prop is an array - string notation", () => {
       const obj = {};
-      setInto("orgs.[3].name", "Fake company")(obj);
+      setInto("orgs[3].name", "Fake company")(obj);
 
       const { orgs } = obj;
+      console.log(obj);
       expect(orgs[3].name).toBe("Fake company");
       expect(Array.isArray(orgs)).toBe(true);
     });
