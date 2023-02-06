@@ -1,6 +1,6 @@
 {
   "name": "@mdor/js-extensions",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Set of different APIs for JavaScript than comes handy to get up to speed",
   "keywords": [
     "javascript",
@@ -23,7 +23,7 @@
     "prettier": "npx prettier --list-different --write \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
     "format": "npx prettier --check \"./*.{js,jsx,ts,tsx,sass,scss,css,html,md}\" \"./**/*.{js,jsx,ts,tsx,sass,scss,css,html,md}\"",
     "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix --report-unused-disable-directives",
-    "test": "jest",
+    "test": "DEBUG=jest jest",
     "test:coverage": "jest --coverage --collectCoverageFrom=\"./src/**\""
   },
   "repository": {
@@ -37,6 +37,9 @@
   },
   "homepage": "https://github.com/MDOR/js-extensions#readme",
   "jest": {
+    "verbose": false,
+    "silent": false,
+    "testEnvironment": "node",
     "coverageReporters": [
       "json",
       "html"
