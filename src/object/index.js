@@ -21,18 +21,12 @@ export function getFrom(path, fallback) {
   const segments = Array.isArray(path) ? path : generateSegmentsFromPath(path);
 
   return function generatedGetterFrom(object) {
-    if (!isValid(object)) return fallback;
-
-    let currentReferencedSection = object;
+    let currentSegment = object;
     for (const segment of segments) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (!currentReferencedSection || !currentReferencedSection.hasOwnProperty(segment)) return fallback;
-      currentReferencedSection = currentReferencedSection[segment];
+      if (!isValid(currentSegment)) break;
+      currentSegment = currentSegment[segment];
     }
-
-    if (typeof currentReferencedSection === "undefined" && typeof fallback !== "undefined") return fallback;
-
-    return currentReferencedSection;
+    return typeof currentSegment !== "undefined" ? currentSegment : fallback;
   };
 }
 
@@ -47,29 +41,27 @@ export function getFrom(path, fallback) {
  * @return {GeneratedGetter} {@link GeneratedGetter}
  */
 export function setInto(path, value) {
-  const generatedPathSegments = Array.isArray(path) ? path : generateSegmentsFromPath(path);
+  const segments = Array.isArray(path) ? path : generateSegmentsFromPath(path);
+  const size = segments.length - 1;
 
   return function generatedSetterFor(object) {
-    const segments = [...generatedPathSegments];
-    let currentReferencedSection = object;
-    let segment;
+    let currentSegment = object;
+    for (let pos = 0; pos <= size; pos++) {
+      const segment = segments[pos];
+      // Due the fact of the prototype pollution risk, we want to mitigate any unwanted access to
+      // this reserved words. I decided to throw an error in order to report any unwanted intent to modify it
+      if (segment === "prototype" || segment === "__proto__" || segment === "constructor")
+        throw new Error(`Intend to access to forbidden property ${segment}, on ${path}`);
 
-    while (segments.length > 0) {
-      segment = segments.shift();
+      if (currentSegment[segment] === null) break;
 
-      if (segments.length > 0) {
+      if (pos < size) {
         // eslint-disable-next-line no-prototype-builtins
-        if (!currentReferencedSection.hasOwnProperty(segment)) {
-          const nextPath = /[0-9]/.test(segments[0]) ? [] : {};
-          currentReferencedSection[segment] = nextPath;
-        }
-        currentReferencedSection = currentReferencedSection[segment];
+        if (!currentSegment.hasOwnProperty(segment))
+          currentSegment[segment] = /[0-9]/.test(segments[pos + 1]) ? [] : {};
+        currentSegment = currentSegment[segment];
       } else {
-        // Due the fact of the prototype pollution risk, we want to mitigate any unwanted access to
-        // this reserved words. I decided to throw an error in order to report any unwanted intent to modify it
-        if (segment === "prototype" || segment === "__proto__" || segment === "constructor")
-          throw new Error(`Intend to access to forbidden property ${segment}`);
-        currentReferencedSection[segment] = value;
+        currentSegment[segment] = value;
       }
     }
   };
